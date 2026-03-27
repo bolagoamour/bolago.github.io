@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bolago — UX/UI Designer & Graphiste</title>
+  <meta name="description" content="Portfolio de Bolago, UX/UI Designer et Graphiste basé à Cotonou, Bénin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0D0D0D; --bg2: #141414; --bg3: #1C1C1C;
+      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
+      --text: #F0EDE8; --muted: rgba(240,237,232,0.45); --accent: #C8F060;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+
+    .cursor { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s, opacity .2s; mix-blend-mode: difference; }
+    .cursor.expand { width: 48px; height: 48px; opacity: 0.25; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 22px 48px; background: rgba(13,13,13,0.9); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: var(--serif); font-size: 22px; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #0D0D0D !important; padding: 8px 20px; border-radius: 100px; font-weight: 500 !important; }
+
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 10vw 80px; position: relative; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; opacity: 0; animation: fadeUp .7s ease forwards .1s; }
+    .blink { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: blinkAnim 2s infinite; display: inline-block; flex-shrink: 0; }
+    @keyframes blinkAnim { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero-title { font-family: var(--serif); font-size: clamp(56px,9vw,110px); font-weight: 400; line-height: .95; letter-spacing: -.03em; margin-bottom: 8px; opacity: 0; animation: fadeUp .8s ease forwards .25s; }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub { font-family: var(--serif); font-size: clamp(36px,5.5vw,72px); font-style: italic; line-height: 1; letter-spacing: -.02em; color: var(--muted); margin-bottom: 40px; opacity: 0; animation: fadeUp .8s ease forwards .4s; }
+    .hero-desc { font-size: 17px; color: var(--muted); max-width: 460px; font-weight: 300; margin-bottom: 40px; opacity: 0; animation: fadeUp .8s ease forwards .55s; }
+    .hero-actions { display: flex; gap: 16px; align-items: center; opacity: 0; animation: fadeUp .8s ease forwards .7s; }
+    .btn-primary { background: var(--accent); color: #0D0D0D; padding: 13px 30px; border-radius: 100px; font-weight: 500; font-size: 15px; text-decoration: none; transition: opacity .2s, transform .2s; display: inline-block; }
+    .btn-primary:hover { opacity: .85; transform: translateY(-2px); }
+    .btn-ghost { color: var(--muted); font-size: 15px; text-decoration: none; transition: color .2s; }
+    .btn-ghost:hover { color: var(--text); }
+    .hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 52px; opacity: 0; animation: fadeUp .8s ease forwards .85s; }
+    .htag { font-size: 12px; padding: 5px 14px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); }
+    .hero-scroll { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: 0; animation: fadeUp 1s ease forwards 1.1s; }
+    .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--accent), transparent); animation: sline 2s infinite; }
+    @keyframes sline { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    .section-wrap { max-width: 1100px; margin: 0 auto; padding: 100px 48px; border-top: 1px solid var(--border); }
+    .section-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .section-heading { font-family: var(--serif); font-size: clamp(34px,4.5vw,54px); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; margin-bottom: 60px; }
+    .section-heading em { font-style: italic; color: var(--accent); }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+    .about-text { font-size: 16px; color: var(--muted); line-height: 1.75; font-weight: 300; margin-bottom: 28px; }
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .skill-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: var(--muted); transition: border-color .2s, color .2s; }
+    .skill-item:hover { border-color: var(--accent); color: var(--text); }
+    .avail { display: inline-flex; align-items: center; gap: 8px; background: rgba(200,240,96,.1); border: 1px solid rgba(200,240,96,.25); border-radius: 100px; padding: 8px 16px; font-size: 13px; color: var(--accent); margin-top: 28px; }
+
+    .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 48px; }
+    .filter-btn { font-size: 13px; padding: 7px 18px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); background: transparent; cursor: pointer; transition: all .2s; font-family: var(--sans); }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,96,.08); }
+
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .project-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: border-color .25s, transform .25s; }
+    .project-card:hover { border-color: var(--border2); transform: translateY(-4px); }
+    .project-card.featured { grid-column: span 2; }
+
+    .project-visual { width: 100%; aspect-ratio: 16/9; overflow: hidden; position: relative; background: var(--bg3); }
+    .project-card.featured .project-visual { aspect-ratio: 21/9; }
+    .project-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; display: block; }
+    .project-card:hover .project-visual img { transform: scale(1.04); }
+
+    .project-body { padding: 22px 26px 26px; }
+    .project-cat { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; font-weight: 500; }
+    .project-title { font-size: 18px; font-weight: 500; color: var(--text); letter-spacing: -.01em; margin-bottom: 8px; }
+    .project-desc { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300; margin-bottom: 16px; }
+    .project-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .project-tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ptag { font-size: 11px; padding: 3px 10px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); }
+    .project-link { font-size: 12px; color: var(--accent); text-decoration: none; opacity: 0; transition: opacity .2s; white-space: nowrap; }
+    .project-card:hover .project-link { opacity: 1; }
+
+    .contact-big { font-family: var(--serif); font-size: clamp(40px,6vw,80px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 20px; }
+    .contact-big em { font-style: italic; color: var(--accent); }
+    .contact-sub { font-size: 16px; color: var(--muted); max-width: 400px; margin: 0 auto 40px; font-weight: 300; }
+    .contact-cards { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+    .ccard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 26px; text-align: left; text-decoration: none; transition: border-color .2s; min-width: 170px; }
+    .ccard:hover { border-color: var(--accent); }
+    .ccard-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 5px; }
+    .ccard-val { font-size: 14px; font-weight: 500; color: var(--text); }
+
+    footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media(max-width:768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      #hero { padding: 120px 24px 60px; }
+      .section-wrap { padding: 72px 24px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: span 1; }
+      .project-card.featured .project-visual { aspect-ratio: 16/9; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <a href="#hero" class="nav-logo">Bolago.</a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#contact-section" class="nav-cta">Me contacter</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-eyebrow"><span class="blink"></span> Disponible pour missions freelance</div>
+  <h1 class="hero-title">Bolago,</h1>
+  <p class="hero-sub">designer & créateur.</p>
+  <p class="hero-desc">Je conçois des interfaces et des identités visuelles qui parlent aux gens — et qui convertissent.</p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">Voir mes projets</a>
+    <a href="#contact-section" class="btn-ghost">Me contacter →</a>
+  </div>
+  <div class="hero-tags">
+    <span class="htag">UX/UI Design</span>
+    <span class="htag">Identité visuelle</span>
+    <span class="htag">Charte graphique</span>
+    <span class="htag">Prototypage</span>
+    <span class="htag">Cotonou, Bénin</span>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<div class="section-wrap" id="about">
+  <div class="reveal">
+    <p class="section-label">01 — À propos</p>
+    <h2 class="section-heading">Designer centré<br>sur <em>l'humain.</em></h2>
+  </div>
+  <div class="about-grid">
+    <div class="reveal">
+      <p class="about-text">Je suis Bolago, designer graphique et UX/UI basé à Cotonou. Ma mission : créer des expériences visuelles claires, modernes et centrées sur l'utilisateur. Que ce soit pour une application mobile, un site web ou une identité de marque, j'apporte une attention particulière à chaque détail.</p>
+      <p class="about-text">Je travaille avec des entrepreneurs, startups et petites entreprises qui souhaitent se démarquer avec un design professionnel et accessible.</p>
+      <div class="avail"><span class="blink"></span> Disponible dès maintenant · Réponse sous 24h</div>
+    </div>
+    <div class="reveal">
+      <div class="skills-grid">
+        <div class="skill-item">UX/UI Design</div>
+        <div class="skill-item">Figma & Adobe XD</div>
+        <div class="skill-item">Identité visuelle</div>
+        <div class="skill-item">Charte graphique</div>
+        <div class="skill-item">Prototypage</div>
+        <div class="skill-item">Design responsive</div>
+        <div class="skill-item">Wireframing</div>
+        <div class="skill-item">Design system</div>
+        <div class="skill-item">Direction artistique</div>
+        <div class="skill-item">Illustrator / PS</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="section-wrap" id="projects">
+  <div class="reveal">
+    <p class="section-label">02 — Projets</p>
+    <h2 class="section-heading">10 projets,<br><em>10 histoires.</em></h2>
+  </div>
+  <div class="filter-bar reveal">
+    <button class="filter-btn active" data-filter="all">Tous</button>
+    <button class="filter-btn" data-filter="identite">Identité visuelle</button>
+    <button class="filter-btn" data-filter="charte">Charte graphique</button>
+    <button class="filter-btn" data-filter="interface">Design d'interface</button>
+    <button class="filter-btn" data-filter="ux">Expérience UX</button>
+  </div>
+
+  <div class="projects-grid" id="projects-grid">
+
+    <!-- P1 FEATURED — Interface + UX -->
+    <div class="project-card featured reveal" data-cat="interface ux">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1400&q=80&auto=format&fit=crop" alt="Application mobile QuickDeliv" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Design d'interface · Expérience UX</div>
+        <div class="project-title">QuickDeliv — Application mobile de livraison</div>
+        <div class="project-desc">Conception UX/UI complète d'une application de livraison locale au Bénin. Recherche utilisateur, personas, parcours client, wireframes basse fidélité, maquettes haute fidélité et prototype interactif Figma. Taux de complétion simulé : 87%.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">UX Research</span><span class="ptag">UI Mobile</span><span class="ptag">Figma</span><span class="ptag">Prototype</span></div>
+          <a href="#" class="project-link">Voir le projet →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P2 — Identité visuelle -->
+    <div class="project-card reveal" data-cat="identite">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?w=900&q=80&auto=format&fit=crop" alt="Identité visuelle Maison Cléa" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Identité visuelle</div>
+        <div class="project-title">Maison Cléa — Cosmétiques naturels</div>
+        <div class="project-desc">Création complète de l'identité visuelle d'une boutique de cosmétiques naturels à Cotonou : logo, palette, typographies et déclinaisons print et digital.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Logo</span><span class="ptag">Branding</span><span class="ptag">Illustrator</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P3 — Identité visuelle -->
+    <div class="project-card reveal" data-cat="identite">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=80&auto=format&fit=crop" alt="Identité restaurant Saveurs d'Abomey" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Identité visuelle</div>
+        <div class="project-title">Saveurs d'Abomey — Restaurant traditionnel</div>
+        <div class="project-desc">Logo inspiré des motifs Fon, palette terre & or, menus, cartes de visite et signalétique pour un restaurant de cuisine béninoise authentique.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Logo</span><span class="ptag">Print</span><span class="ptag">Signalétique</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P4 — Charte graphique -->
+    <div class="project-card reveal" data-cat="charte">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=900&q=80&auto=format&fit=crop" alt="Charte graphique TechHub BJ" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Charte graphique</div>
+        <div class="project-title">TechHub BJ — Startup technologique</div>
+        <div class="project-desc">Charte graphique complète : guide des couleurs, typographies, grilles, iconographie, usage du logo et templates de communication pour une startup tech béninoise.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Brand Guidelines</span><span class="ptag">Design System</span><span class="ptag">Figma</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P5 — Charte graphique -->
+    <div class="project-card reveal" data-cat="charte">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1560472355-536de3962603?w=900&q=80&auto=format&fit=crop" alt="Charte graphique EduAfrique" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Charte graphique</div>
+        <div class="project-title">EduAfrique — ONG éducation</div>
+        <div class="project-desc">Refonte de l'identité graphique d'une ONG présente dans 5 pays africains. Charte complète avec déclinaisons print, digital et signalétique terrain.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">ONG</span><span class="ptag">Rebranding</span><span class="ptag">Print & Digital</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P6 FEATURED — Dashboard SVG mockup -->
+    <div class="project-card featured reveal" data-cat="interface ux">
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#111318;">
+          <defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width="1"/></pattern></defs>
+          <rect width="1200" height="500" fill="url(#g)"/>
+          <!-- Sidebar -->
+          <rect x="30" y="30" width="190" height="440" rx="14" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="50" y="52" width="34" height="34" rx="9" fill="#C8F060"/>
+          <rect x="92" y="60" width="78" height="10" rx="4" fill="rgba(255,255,255,0.55)"/>
+          <rect x="92" y="74" width="52" height="7" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="46" y="110" width="158" height="38" rx="9" fill="rgba(200,240,96,0.14)" stroke="rgba(200,240,96,0.28)" stroke-width="1"/>
+          <rect x="58" y="121" width="14" height="14" rx="3" fill="#C8F060"/>
+          <rect x="78" y="124" width="64" height="8" rx="3" fill="#C8F060"/>
+          <rect x="58" y="160" width="14" height="14" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="78" y="163" width="72" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="58" y="188" width="14" height="14" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="78" y="191" width="58" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="58" y="216" width="14" height="14" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="78" y="219" width="66" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="58" y="244" width="14" height="14" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="78" y="247" width="50" height="8" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <!-- Stat cards -->
+          <rect x="240" y="30" width="148" height="86" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="256" y="48" width="64" height="8" rx="3" fill="rgba(255,255,255,0.28)"/>
+          <rect x="256" y="62" width="84" height="16" rx="4" fill="rgba(255,255,255,0.7)"/>
+          <rect x="256" y="84" width="52" height="7" rx="3" fill="#C8F060" opacity=".7"/>
+          <rect x="400" y="30" width="148" height="86" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="416" y="48" width="64" height="8" rx="3" fill="rgba(255,255,255,0.28)"/>
+          <rect x="416" y="62" width="84" height="16" rx="4" fill="rgba(255,255,255,0.7)"/>
+          <rect x="416" y="84" width="52" height="7" rx="3" fill="#C8F060" opacity=".7"/>
+          <rect x="560" y="30" width="148" height="86" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="576" y="48" width="64" height="8" rx="3" fill="rgba(255,255,255,0.28)"/>
+          <rect x="576" y="62" width="84" height="16" rx="4" fill="rgba(255,255,255,0.7)"/>
+          <rect x="576" y="84" width="52" height="7" rx="3" fill="#C8F060" opacity=".7"/>
+          <!-- Chart -->
+          <rect x="240" y="130" width="468" height="260" rx="14" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="258" y="148" width="110" height="10" rx="4" fill="rgba(255,255,255,0.45)"/>
+          <rect x="258" y="162" width="70" height="7" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="270" y="340" width="30" height="28" rx="4" fill="rgba(200,240,96,.18)"/>
+          <rect x="314" y="310" width="30" height="58" rx="4" fill="rgba(200,240,96,.35)"/>
+          <rect x="358" y="278" width="30" height="90" rx="4" fill="rgba(200,240,96,.55)"/>
+          <rect x="402" y="250" width="30" height="118" rx="4" fill="#C8F060"/>
+          <rect x="446" y="270" width="30" height="98" rx="4" fill="rgba(200,240,96,.65)"/>
+          <rect x="490" y="295" width="30" height="73" rx="4" fill="rgba(200,240,96,.45)"/>
+          <rect x="534" y="258" width="30" height="110" rx="4" fill="rgba(200,240,96,.72)"/>
+          <rect x="578" y="230" width="30" height="138" rx="4" fill="#C8F060"/>
+          <rect x="622" y="255" width="30" height="113" rx="4" fill="rgba(200,240,96,.6)"/>
+          <!-- Right panel activity -->
+          <rect x="726" y="30" width="200" height="360" rx="14" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="744" y="50" width="90" height="9" rx="3" fill="rgba(255,255,255,0.38)"/>
+          <rect x="744" y="76" width="164" height="48" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <rect x="756" y="88" width="10" height="10" rx="2" fill="#C8F060"/>
+          <rect x="772" y="88" width="70" height="7" rx="3" fill="rgba(255,255,255,0.45)"/>
+          <rect x="772" y="100" width="44" height="5" rx="2" fill="rgba(255,255,255,0.18)"/>
+          <rect x="744" y="132" width="164" height="48" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <rect x="756" y="144" width="10" height="10" rx="2" fill="rgba(200,240,96,.5)"/>
+          <rect x="772" y="144" width="80" height="7" rx="3" fill="rgba(255,255,255,0.45)"/>
+          <rect x="772" y="156" width="48" height="5" rx="2" fill="rgba(255,255,255,0.18)"/>
+          <rect x="744" y="188" width="164" height="48" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <rect x="756" y="200" width="10" height="10" rx="2" fill="rgba(200,240,96,.3)"/>
+          <rect x="772" y="200" width="60" height="7" rx="3" fill="rgba(255,255,255,0.45)"/>
+          <rect x="772" y="212" width="38" height="5" rx="2" fill="rgba(255,255,255,0.18)"/>
+          <rect x="744" y="244" width="164" height="48" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <rect x="756" y="256" width="10" height="10" rx="2" fill="rgba(200,240,96,.2)"/>
+          <rect x="772" y="256" width="74" height="7" rx="3" fill="rgba(255,255,255,0.45)"/>
+          <rect x="772" y="268" width="42" height="5" rx="2" fill="rgba(255,255,255,0.18)"/>
+          <!-- Phone mockup -->
+          <rect x="944" y="20" width="230" height="460" rx="20" fill="#16181F" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+          <rect x="974" y="46" width="170" height="400" rx="16" fill="#0D0D0D" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <rect x="1034" y="54" width="50" height="12" rx="6" fill="#1C1C1C"/>
+          <rect x="984" y="80" width="150" height="24" rx="7" fill="#1A1D27"/>
+          <rect x="992" y="88" width="70" height="7" rx="3" fill="rgba(255,255,255,0.45)"/>
+          <rect x="984" y="114" width="72" height="64" rx="10" fill="#1A1D27"/>
+          <rect x="992" y="126" width="44" height="6" rx="3" fill="rgba(255,255,255,0.28)"/>
+          <rect x="992" y="138" width="54" height="12" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="992" y="156" width="36" height="6" rx="3" fill="#C8F060" opacity=".7"/>
+          <rect x="1066" y="114" width="68" height="64" rx="10" fill="rgba(200,240,96,0.1)" stroke="rgba(200,240,96,0.2)" stroke-width="1"/>
+          <rect x="1074" y="126" width="44" height="6" rx="3" fill="rgba(200,240,96,0.35)"/>
+          <rect x="1074" y="138" width="54" height="12" rx="3" fill="#C8F060"/>
+          <rect x="1074" y="156" width="36" height="6" rx="3" fill="rgba(200,240,96,.6)"/>
+          <rect x="984" y="190" width="150" height="7" rx="3" fill="rgba(255,255,255,0.06)"/>
+          <rect x="984" y="203" width="110" height="7" rx="3" fill="rgba(255,255,255,0.04)"/>
+          <rect x="984" y="222" width="150" height="44" rx="10" fill="#C8F060"/>
+          <rect x="1022" y="238" width="74" height="8" rx="3" fill="#0D0D0D"/>
+          <rect x="984" y="278" width="150" height="44" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <rect x="1020" y="294" width="78" height="8" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="984" y="400" width="150" height="36" rx="8" fill="#1A1D27"/>
+          <rect x="996" y="412" width="18" height="14" rx="3" fill="rgba(255,255,255,0.12)"/>
+          <rect x="1022" y="412" width="18" height="14" rx="3" fill="rgba(255,255,255,0.12)"/>
+          <rect x="1048" y="412" width="18" height="14" rx="3" fill="#C8F060" opacity=".8"/>
+          <rect x="1074" y="412" width="18" height="14" rx="3" fill="rgba(255,255,255,0.12)"/>
+          <rect x="1100" y="412" width="18" height="14" rx="3" fill="rgba(255,255,255,0.12)"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Design d'interface · Design System</div>
+        <div class="project-title">FinDash — Design System & Dashboard analytics</div>
+        <div class="project-desc">Conception d'un design system complet et d'un dashboard analytics pour une fintech. Librairie de composants Figma (80+ éléments), documentation, tokens de design, déclinaison mobile et web. Le mockup ci-dessus est entièrement généré en SVG.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Design System</span><span class="ptag">Dashboard</span><span class="ptag">Figma</span><span class="ptag">Mobile</span></div>
+          <a href="#" class="project-link">Voir le projet →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P7 — Interface fintech -->
+    <div class="project-card reveal" data-cat="interface">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=900&q=80&auto=format&fit=crop" alt="PayBénin app" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Design d'interface · Fintech</div>
+        <div class="project-title">PayBénin — Application de paiement mobile</div>
+        <div class="project-desc">Interface d'une app de paiement mobile pour l'Afrique de l'Ouest : transferts, recharges, historique. Design épuré et accessible, optimisé pour les connexions lentes.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Fintech</span><span class="ptag">UI Mobile</span><span class="ptag">Figma</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P8 — UX e-commerce -->
+    <div class="project-card reveal" data-cat="ux">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80&auto=format&fit=crop" alt="Marché Numérique BJ" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Expérience UX · E-commerce</div>
+        <div class="project-title">Marché Numérique BJ — Plateforme e-commerce</div>
+        <div class="project-desc">Audit UX complet et refonte du parcours d'achat d'une marketplace béninoise. Tests utilisateurs, carte d'empathie, prototypes itératifs. +31% de taux de conversion.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">UX Audit</span><span class="ptag">Tests utilisateurs</span><span class="ptag">E-commerce</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P9 — Identité + charte immobilier -->
+    <div class="project-card reveal" data-cat="identite charte">
+      <div class="project-visual">
+        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=900&q=80&auto=format&fit=crop" alt="Espace Immo identité" loading="lazy" />
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Identité visuelle · Charte graphique</div>
+        <div class="project-title">Espace Immo — Agence immobilière haut de gamme</div>
+        <div class="project-desc">Identité complète d'une agence immobilière à Cotonou : logo, charte, brochures, panneaux, cartes de visite et templates réseaux sociaux.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Logo</span><span class="ptag">Brochure</span><span class="ptag">Social Media</span></div>
+          <a href="#" class="project-link">Voir →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- P10 FEATURED — UX app santé, SVG mockup mobile -->
+    <div class="project-card featured reveal" data-cat="ux interface">
+      <div class="project-visual">
+        <svg viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#0E1118;">
+          <defs><pattern id="g2" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0L0 0 0 32" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs>
+          <rect width="1200" height="480" fill="url(#g2)"/>
+          <!-- 3 phone screens side by side -->
+          <!-- Screen 1: Onboarding -->
+          <rect x="80" y="30" width="220" height="420" rx="22" fill="#13151D" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+          <rect x="108" y="56" width="164" height="368" rx="14" fill="#0A0C12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <rect x="158" y="64" width="64" height="12" rx="6" fill="#1C1E28"/>
+          <rect x="128" y="100" width="124" height="124" rx="62" fill="rgba(200,240,96,0.08)" stroke="rgba(200,240,96,0.2)" stroke-width="1.5"/>
+          <rect x="160" y="136" width="60" height="52" rx="8" fill="rgba(200,240,96,0.15)"/>
+          <rect x="175" y="148" width="30" height="6" rx="3" fill="#C8F060" opacity=".8"/>
+          <rect x="170" y="160" width="40" height="6" rx="3" fill="#C8F060" opacity=".5"/>
+          <rect x="170" y="172" width="36" height="6" rx="3" fill="#C8F060" opacity=".3"/>
+          <rect x="128" y="242" width="124" height="10" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="140" y="258" width="100" height="7" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="128" y="286" width="124" height="38" rx="10" fill="#C8F060"/>
+          <rect x="160" y="300" width="60" height="8" rx="3" fill="#0A0C12"/>
+          <rect x="128" y="334" width="124" height="38" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <rect x="156" y="348" width="68" height="8" rx="3" fill="rgba(255,255,255,0.3)"/>
+
+          <!-- Screen 2: Dashboard santé (central, bigger) -->
+          <rect x="370" y="10" width="260" height="460" rx="26" fill="#13151D" stroke="rgba(200,240,96,0.25)" stroke-width="2"/>
+          <rect x="400" y="38" width="200" height="404" rx="16" fill="#0A0C12" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="458" y="46" width="84" height="12" rx="6" fill="#1C1E28"/>
+          <!-- Header -->
+          <rect x="412" y="72" width="120" height="9" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="412" y="85" width="80" height="7" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="562" y="68" width="32" height="32" rx="16" fill="rgba(200,240,96,0.15)" stroke="rgba(200,240,96,0.3)" stroke-width="1"/>
+          <!-- Heart rate card -->
+          <rect x="412" y="108" width="176" height="72" rx="12" fill="rgba(200,240,96,0.08)" stroke="rgba(200,240,96,0.2)" stroke-width="1"/>
+          <rect x="424" y="120" width="56" height="7" rx="3" fill="rgba(200,240,96,0.5)"/>
+          <rect x="424" y="133" width="70" height="18" rx="4" fill="#C8F060"/>
+          <rect x="424" y="157" width="48" height="7" rx="3" fill="rgba(255,255,255,0.25)"/>
+          <!-- Mini chart inside -->
+          <polyline points="510,165 522,148 534,158 546,140 558,152 570,138 582,150" fill="none" stroke="#C8F060" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Stats row -->
+          <rect x="412" y="192" width="84" height="64" rx="10" fill="#1A1D27"/>
+          <rect x="422" y="204" width="48" height="6" rx="3" fill="rgba(255,255,255,0.25)"/>
+          <rect x="422" y="216" width="58" height="12" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="422" y="234" width="38" height="6" rx="3" fill="rgba(200,240,96,0.5)"/>
+          <rect x="504" y="192" width="84" height="64" rx="10" fill="#1A1D27"/>
+          <rect x="514" y="204" width="48" height="6" rx="3" fill="rgba(255,255,255,0.25)"/>
+          <rect x="514" y="216" width="58" height="12" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="514" y="234" width="38" height="6" rx="3" fill="rgba(200,240,96,0.5)"/>
+          <!-- Weekly bars -->
+          <rect x="412" y="270" width="176" height="100" rx="10" fill="#1A1D27"/>
+          <rect x="424" y="282" width="60" height="7" rx="3" fill="rgba(255,255,255,0.35)"/>
+          <rect x="424" y="308" width="18" height="42" rx="3" fill="rgba(200,240,96,0.25)"/>
+          <rect x="448" y="298" width="18" height="52" rx="3" fill="rgba(200,240,96,0.45)"/>
+          <rect x="472" y="288" width="18" height="62" rx="3" fill="#C8F060"/>
+          <rect x="496" y="295" width="18" height="55" rx="3" fill="rgba(200,240,96,0.55)"/>
+          <rect x="520" y="305" width="18" height="45" rx="3" fill="rgba(200,240,96,0.35)"/>
+          <rect x="544" y="292" width="18" height="58" rx="3" fill="rgba(200,240,96,0.65)"/>
+          <!-- Bottom nav -->
+          <rect x="412" y="400" width="176" height="36" rx="9" fill="#1A1D27"/>
+          <rect x="424" y="412" width="16" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+          <rect x="450" y="412" width="16" height="12" rx="3" fill="#C8F060" opacity=".85"/>
+          <rect x="476" y="412" width="16" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+          <rect x="502" y="412" width="16" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+          <rect x="528" y="412" width="16" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+          <rect x="554" y="412" width="16" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+
+          <!-- Screen 3: Profile / Metrics -->
+          <rect x="700" y="30" width="220" height="420" rx="22" fill="#13151D" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+          <rect x="728" y="56" width="164" height="368" rx="14" fill="#0A0C12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <rect x="778" y="64" width="64" height="12" rx="6" fill="#1C1E28"/>
+          <rect x="790" y="90" width="40" height="40" rx="20" fill="rgba(200,240,96,0.2)" stroke="rgba(200,240,96,0.4)" stroke-width="1.5"/>
+          <rect x="800" y="105" width="20" height="10" rx="2" fill="#C8F060" opacity=".7"/>
+          <rect x="756" y="142" width="128" height="8" rx="3" fill="rgba(255,255,255,0.5)"/>
+          <rect x="768" y="155" width="104" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="740" y="178" width="60" height="56" rx="10" fill="#1A1D27"/>
+          <rect x="750" y="190" width="36" height="6" rx="3" fill="rgba(255,255,255,0.22)"/>
+          <rect x="750" y="202" width="44" height="12" rx="3" fill="rgba(255,255,255,0.55)"/>
+          <rect x="750" y="220" width="28" height="6" rx="3" fill="#C8F060" opacity=".55"/>
+          <rect x="810" y="178" width="60" height="56" rx="10" fill="#1A1D27"/>
+          <rect x="820" y="190" width="36" height="6" rx="3" fill="rgba(255,255,255,0.22)"/>
+          <rect x="820" y="202" width="44" height="12" rx="3" fill="rgba(255,255,255,0.55)"/>
+          <rect x="820" y="220" width="28" height="6" rx="3" fill="#C8F060" opacity=".55"/>
+          <rect x="740" y="248" width="130" height="36" rx="9" fill="rgba(200,240,96,0.08)" stroke="rgba(200,240,96,0.15)" stroke-width="1"/>
+          <rect x="752" y="260" width="90" height="7" rx="3" fill="rgba(255,255,255,0.35)"/>
+          <rect x="740" y="294" width="130" height="36" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="752" y="306" width="80" height="7" rx="3" fill="rgba(255,255,255,0.25)"/>
+          <rect x="740" y="340" width="130" height="36" rx="9" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="752" y="352" width="70" height="7" rx="3" fill="rgba(255,255,255,0.25)"/>
+          <rect x="740" y="390" width="130" height="22" rx="6" fill="#C8F060"/>
+          <rect x="778" y="396" width="54" height="7" rx="3" fill="#0A0C12"/>
+
+          <!-- Decorative text labels -->
+          <rect x="960" y="30" width="200" height="420" rx="14" fill="rgba(0,0,0,0)" />
+          <!-- Floating label cards -->
+          <rect x="950" y="60" width="210" height="60" rx="12" fill="#1A1D27" stroke="rgba(200,240,96,0.2)" stroke-width="1"/>
+          <rect x="966" y="76" width="50" height="7" rx="3" fill="rgba(200,240,96,0.5)"/>
+          <rect x="966" y="89" width="140" height="9" rx="4" fill="rgba(255,255,255,0.55)"/>
+          <rect x="966" y="103" width="90" height="7" rx="3" fill="rgba(255,255,255,0.2)"/>
+          <rect x="950" y="136" width="210" height="60" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="966" y="152" width="50" height="7" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="966" y="165" width="130" height="9" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="966" y="179" width="80" height="7" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="950" y="212" width="210" height="60" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="966" y="228" width="50" height="7" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="966" y="241" width="150" height="9" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="966" y="255" width="95" height="7" rx="3" fill="rgba(255,255,255,0.18)"/>
+          <rect x="950" y="292" width="210" height="60" rx="12" fill="#1A1D27" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          <rect x="966" y="308" width="50" height="7" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="966" y="321" width="120" height="9" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="966" y="335" width="75" height="7" rx="3" fill="rgba(255,255,255,0.18)"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <div class="project-cat">Expérience UX · Design d'interface · Santé</div>
+        <div class="project-title">VitaTrack — Application santé & bien-être</div>
+        <div class="project-desc">Conception UX/UI d'une application de suivi de santé : onboarding, dashboard de métriques (rythme cardiaque, activité, sommeil), profil utilisateur. 3 écrans clés illustrés ci-dessus en mockup SVG natif. Tests utilisateurs réalisés sur 12 profils béninois.</div>
+        <div class="project-footer">
+          <div class="project-tags-row"><span class="ptag">Health UX</span><span class="ptag">UI Mobile</span><span class="ptag">Figma</span><span class="ptag">User Testing</span></div>
+          <a href="#" class="project-link">Voir le projet →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="section-wrap" id="contact-section">
+  <div class="reveal" style="text-align:center;">
+    <p class="section-label" style="justify-content:center;display:flex;">03 — Contact</p>
+    <h2 class="contact-big">Travaillons<br><em>ensemble.</em></h2>
+    <p class="contact-sub">Tu as un projet de design ? Contacte-moi, je réponds sous 24h.</p>
+    <div class="contact-cards">
+      <a href="mailto:amourbolago4@gmail.com" class="ccard">
+        <div class="ccard-label">Email</div>
+        <div class="ccard-val">amourbolago4@gmail.com</div>
+      </a>
+      <a href="tel:+22901522149" class="ccard">
+        <div class="ccard-label">WhatsApp / Tél.</div>
+        <div class="ccard-val">+229 01 52 21 49 92</div>
+      </a>
+      <a href="https://linkedin.com/in/bolago" target="_blank" class="ccard">
+        <div class="ccard-label">LinkedIn</div>
+        <div class="ccard-val">linkedin.com/in/bolago</div>
+      </a>
+    </div>
+    <a href="mailto:amourbolago4@gmail.com" class="btn-primary">Envoyer un message →</a>
+  </div>
+</div>
+
+<footer>
+  <p class="footer-copy">© 2026 Bolago. Tous droits réservés.</p>
+  <div class="footer-links">
+    <a href="#hero">Accueil</a>
+    <a href="#about">À propos</a>
+    <a href="#projects">Projets</a>
+    <a href="#contact-section">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a,button,.project-card,.skill-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card => {
+        const cats = card.dataset.cat || '';
+        card.style.display = (f === 'all' || cats.includes(f)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
